@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import type { Note } from "@/types";
 import { useRouter } from "vue-router";
 import { useNoteStore } from "@/stores/notes";
+import { useRefHistory } from "@vueuse/core";
 
 // send data to Parent components
 const emit = defineEmits<{
@@ -33,6 +34,8 @@ const note = ref<Note>(
         ],
       }
 );
+
+const { undo, redo, canRedo, canUndo } = useRefHistory(note, { deep: true });
 
 const isValidForm = computed(() => {
   return (
@@ -95,6 +98,24 @@ const cancelHandler = () => {
       </button>
     </div>
     <p v-if="!isValidForm" class="error">Please fill all fields!!!</p>
+    <div class="actions">
+      <button
+        type="button"
+        class="btn red"
+        :disabled="!canUndo"
+        @click="undo()"
+      >
+        Undo
+      </button>
+      <button
+        type="button"
+        class="btn blue"
+        :disabled="!canRedo"
+        @click="redo()"
+      >
+        Redo
+      </button>
+    </div>
     <div class="actions">
       <button
         class="btn"
@@ -169,6 +190,12 @@ form {
     display: flex;
     margin-top: 1rem;
     justify-content: space-evenly;
+
+    button:disabled {
+      color: #aaa;
+      cursor: not-allowed;
+      background-color: #eee;
+    }
   }
   .error {
     margin-top: 0.5rem;
