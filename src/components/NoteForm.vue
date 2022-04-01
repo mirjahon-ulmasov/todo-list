@@ -21,7 +21,7 @@ const notesStore = useNoteStore();
 
 const note = ref<Note>(
   props.note
-    ? props.note
+    ? JSON.parse(JSON.stringify(props.note))
     : {
         id: Date.now(),
         title: "",
@@ -54,6 +54,7 @@ const submitHandler = () => {
 // Удалить note
 const deleteNoteHandler = (id: number) => {
   notesStore.deleteNoteById(id);
+  router.push({ name: "main" });
 };
 
 // Добавить task
