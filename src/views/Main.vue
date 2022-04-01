@@ -21,9 +21,10 @@ const addNoteHandler = () => {
     <h1>My Notes</h1>
     <button class="btn blue" @click="addNoteHandler()">Добавить</button>
   </header>
-  <div class="notes">
+  <div v-if="notes.length > 0" class="notes">
     <NoteCard v-for="note in notes" :key="note.id" :note="note" />
   </div>
+  <p v-else>Результатов не найдено!!!</p>
 </template>
 
 <style lang="scss">
@@ -41,5 +42,10 @@ header {
 }
 .notes {
   padding: 2rem;
+}
+p {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
 }
 </style>
